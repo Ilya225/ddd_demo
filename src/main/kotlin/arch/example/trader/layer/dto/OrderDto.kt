@@ -1,0 +1,15 @@
+package arch.example.trader.layer.dto
+
+import arch.example.trader.layer.entity.OrderType
+import java.math.BigDecimal
+import java.time.Instant
+import java.util.UUID
+
+data class OrderDto(
+    val traderId: UUID,
+    val assetId: UUID,
+    val price: BigDecimal,
+    val type: OrderType,
+    val quantity: Long,
+    val placedAt: Instant
+)
