@@ -1,4 +1,4 @@
-package arch.example.trader.hexagon.api.rest.request
+package arch.example.trader.hexagon.adapters.rest.request
 
 
 data class UserRequest(

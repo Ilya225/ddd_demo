@@ -1,4 +1,4 @@
-package arch.example.trader.hexagon.domain.port.outgoing
+package arch.example.trader.hexagon.application.port.outgoing
 
 import arch.example.trader.hexagon.domain.entity.AssetId
 import arch.example.trader.hexagon.domain.entity.Order

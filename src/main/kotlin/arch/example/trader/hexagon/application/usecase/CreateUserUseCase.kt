@@ -1,16 +1,16 @@
-package arch.example.trader.hexagon.application.adapter
+package arch.example.trader.hexagon.application.usecase
 
 import arch.example.trader.hexagon.domain.policy.UserShouldNotExistPolicy
 import arch.example.trader.hexagon.domain.entity.User
 import arch.example.trader.hexagon.domain.entity.UserId
-import arch.example.trader.hexagon.domain.port.incoming.CreateUserPort
-import arch.example.trader.hexagon.domain.port.outgoing.UserRepository
+import arch.example.trader.hexagon.application.port.incoming.CreateUserPort
+import arch.example.trader.hexagon.application.port.outgoing.UserRepository
 import arch.example.trader.hexagon.domain.specification.UsersInValidStateSpecification
 import org.springframework.stereotype.Service
 import org.springframework.util.IdGenerator
 
 @Service
-class CreateUserAdapter(
+class CreateUserUseCase(
     val userRepository: UserRepository,
     val idGenerator: IdGenerator,
     val userShouldNotExistPolicy: UserShouldNotExistPolicy

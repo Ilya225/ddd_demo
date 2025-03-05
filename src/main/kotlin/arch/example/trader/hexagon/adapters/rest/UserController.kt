@@ -1,8 +1,8 @@
-package arch.example.trader.hexagon.api.rest
+package arch.example.trader.hexagon.adapters.rest
 
-import arch.example.trader.hexagon.api.rest.request.UserRequest
+import arch.example.trader.hexagon.adapters.rest.request.UserRequest
 import arch.example.trader.hexagon.domain.entity.UserId
-import arch.example.trader.hexagon.domain.port.incoming.CreateUserPort
+import arch.example.trader.hexagon.application.port.incoming.CreateUserPort
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

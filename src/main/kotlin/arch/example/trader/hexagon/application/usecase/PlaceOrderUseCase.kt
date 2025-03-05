@@ -1,10 +1,10 @@
-package arch.example.trader.hexagon.application.adapter
+package arch.example.trader.hexagon.application.usecase
 
 import arch.example.trader.hexagon.domain.entity.Order
-import arch.example.trader.hexagon.domain.port.incoming.PlaceOrderPort
-import arch.example.trader.hexagon.domain.port.outgoing.OrderBook
+import arch.example.trader.hexagon.application.port.incoming.PlaceOrderPort
+import arch.example.trader.hexagon.application.port.outgoing.OrderBook
 
-class PlaceOrderAdapter(
+class PlaceOrderUseCase(
     val orderBook: OrderBook
 ): PlaceOrderPort {
 

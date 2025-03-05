@@ -1,14 +1,14 @@
-package arch.example.trader.hexagon.application.adapter
+package arch.example.trader.hexagon.application.usecase
 
 import arch.example.trader.hexagon.domain.policy.UserShouldNotExistPolicy
 import arch.example.trader.hexagon.domain.entity.User
 import arch.example.trader.hexagon.domain.entity.UserId
-import arch.example.trader.hexagon.domain.port.incoming.CreateUserAlwaysValidPort
-import arch.example.trader.hexagon.domain.port.outgoing.UserRepository
+import arch.example.trader.hexagon.application.port.incoming.CreateUserAlwaysValidPort
+import arch.example.trader.hexagon.application.port.outgoing.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
-class CreateUserAlwaysValidAdapter(
+class CreateUserAlwaysValidUseCase(
     val userRepository: UserRepository,
     val userShouldNotExistPolicy: UserShouldNotExistPolicy
 ) : CreateUserAlwaysValidPort {
