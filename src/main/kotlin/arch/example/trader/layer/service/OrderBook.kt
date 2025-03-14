@@ -1,10 +1,9 @@
 package arch.example.trader.layer.service
 
-import arch.example.trader.layer.entity.Order
-import arch.example.trader.layer.entity.OrderType
+import arch.example.trader.layer.domain.Order
+import arch.example.trader.layer.domain.OrderType
 import org.springframework.stereotype.Service
-import java.util.PriorityQueue
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
@@ -15,8 +14,15 @@ class OrderBook(
 
     fun addOrder(order: Order) {
         when (order.type) {
-            OrderType.BUY -> addOrder(order, buyOrders, compareByDescending { it.price })
-            OrderType.SELL -> addOrder(order, sellOrders, compareBy { it.price })
+            OrderType.BUY -> addOrder(
+                order,
+                buyOrders,
+                compareByDescending { it: Order -> it.price }.thenBy { it.placedAt })
+
+            OrderType.SELL -> addOrder(
+                order,
+                sellOrders,
+                compareBy { it: Order -> it.price }.thenBy { it.placedAt })
         }
     }
 
@@ -25,10 +31,12 @@ class OrderBook(
         store: ConcurrentHashMap<UUID, PriorityQueue<Order>>,
         comparator: Comparator<Order>
     ) {
-        if (store.contains(order.id)) {
-            store[order.id]!!.add(order)
+        if (store.containsKey(order.assetId)) {
+            store[order.assetId]!!.add(order)
         } else {
-            store.put(order.id, PriorityQueue<Order>(comparator))
+            val queue = PriorityQueue<Order>(comparator)
+            queue.add(order)
+            store.put(order.assetId, queue)
         }
     }
 
@@ -37,8 +45,8 @@ class OrderBook(
 
     fun removeOrder(order: Order) {
         when (order.type) {
-            OrderType.BUY -> buyOrders[order.id]?.remove(order)
-            OrderType.SELL -> sellOrders[order.id]?.remove(order)
+            OrderType.BUY -> buyOrders[order.assetId]?.remove(order)
+            OrderType.SELL -> sellOrders[order.assetId]?.remove(order)
         }
     }
 

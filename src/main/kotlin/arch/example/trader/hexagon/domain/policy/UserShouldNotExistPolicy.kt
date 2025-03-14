@@ -2,7 +2,7 @@ package arch.example.trader.hexagon.domain.policy
 
 import arch.example.trader.component.ddd.Policy
 import arch.example.trader.hexagon.domain.entity.User
-import arch.example.trader.hexagon.application.port.outgoing.UserRepository
+import arch.example.trader.hexagon.domain.port.outgoing.UserRepository
 
 
 class UserShouldNotExistPolicy(

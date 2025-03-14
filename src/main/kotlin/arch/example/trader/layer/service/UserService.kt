@@ -2,7 +2,7 @@ package arch.example.trader.layer.service
 
 import arch.example.trader.layer.dto.PatchUserDto
 import arch.example.trader.layer.dto.UserDto
-import arch.example.trader.layer.entity.User
+import arch.example.trader.layer.domain.User
 import arch.example.trader.layer.repository.UserRepository
 import org.springframework.stereotype.Service
 import java.util.UUID

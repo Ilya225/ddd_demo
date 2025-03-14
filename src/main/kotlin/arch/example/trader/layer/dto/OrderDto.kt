@@ -1,6 +1,6 @@
 package arch.example.trader.layer.dto
 
-import arch.example.trader.layer.entity.OrderType
+import arch.example.trader.layer.domain.OrderType
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID

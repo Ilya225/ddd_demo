@@ -1,30 +1,30 @@
 package arch.example.trader.hexagon.domain.entity
 
-import java.math.BigDecimal
-import java.util.UUID
+import arch.example.trader.component.ddd.vo.Money
+import java.time.Instant
+import java.util.*
 
 @JvmInline
 value class OrderId(val id: UUID)
 
 data class Order(
+    val id: OrderId,
+    val traderId: UserId,
     val assetId: AssetId,
     val type: OrderType,
-    val maxPriceCap: BigDecimal,
-    val minPriceCap: BigDecimal
-)
+    val unitPrice: Money,
+    val quantity: Long,
+    val placedAt: Instant
+) {
 
-enum class OrderType {
-    SELL, BUY, CANCEL
+    val price: Money = unitPrice.times(quantity)
+
+    fun isMatch(match: Order): Boolean {
+        return if (this.type == OrderType.BUY) this.price >= match.price
+        else this.price <= match.price
+    }
 }
 
-
-
-data class OrderBatch(
-    val id: OrderId,
-    val accountId: UserId,
-    val items: List<Order>
-)
-
-
-
-
+enum class OrderType {
+    SELL, BUY
+}

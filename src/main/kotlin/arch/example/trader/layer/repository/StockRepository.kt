@@ -1,6 +1,6 @@
 package arch.example.trader.layer.repository
 
-import arch.example.trader.layer.entity.User
+import arch.example.trader.layer.domain.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 import java.util.UUID

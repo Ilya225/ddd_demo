@@ -1,8 +1,8 @@
 package arch.example.trader.layer.service
 
-import arch.example.trader.layer.entity.Deal
-import arch.example.trader.layer.entity.Order
-import arch.example.trader.layer.entity.OrderType
+import arch.example.trader.layer.domain.Deal
+import arch.example.trader.layer.domain.Order
+import arch.example.trader.layer.domain.OrderType
 import arch.example.trader.layer.repository.DealRepository
 import java.time.Instant
 import java.util.UUID

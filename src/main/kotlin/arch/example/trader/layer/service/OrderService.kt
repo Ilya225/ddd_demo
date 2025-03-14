@@ -1,7 +1,7 @@
 package arch.example.trader.layer.service
 
 import arch.example.trader.layer.dto.OrderDto
-import arch.example.trader.layer.entity.Order
+import arch.example.trader.layer.domain.Order
 import arch.example.trader.layer.repository.DealRepository
 import arch.example.trader.layer.repository.IPORepository
 import org.springframework.stereotype.Service
