@@ -1,6 +1,7 @@
 package arch.example.trader.hexagon.domain.entity
 
 import arch.example.trader.component.ddd.vo.Money
+import java.math.BigDecimal
 import java.time.Instant
 import java.util.*
 
@@ -22,6 +23,14 @@ data class Order(
     fun isMatch(match: Order): Boolean {
         return if (this.type == OrderType.BUY) this.price >= match.price
         else this.price <= match.price
+    }
+
+    fun allocate(ratio: BigDecimal = BigDecimal(1.0)): Order {
+        return this.copy(quantity = ratio.multiply(BigDecimal(quantity)).toLong())
+    }
+
+    fun allocate(quantity: Long): Order {
+        return this.copy(quantity = this.quantity - quantity)
     }
 }
 

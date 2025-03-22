@@ -2,10 +2,11 @@ package arch.example.trader.cqrs.command.handler
 
 import arch.example.trader.component.cqrs.handler.CommandHandler
 import arch.example.trader.cqrs.command.domain.entity.event.DealSealedEvent
+import arch.example.trader.cqrs.command.domain.entity.event.OrderMatchedEvent
 import arch.example.trader.cqrs.command.domain.repository.OrderBook
+import arch.example.trader.cqrs.command.factory.TradingStrategyFactory
 import arch.example.trader.cqrs.command.input.MatchOrderCommand
 import arch.example.trader.cqrs.command.output.OrderMatched
-import arch.example.trader.cqrs.command.strategy.TradingStrategyFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
@@ -22,10 +23,21 @@ class OrderMatchingHandler(
         val deals = tradingStrategyFactory.obtainStrategy(order)
             .invoke(order)
 
-        deals.forEach { deal ->
-            applicationEventPublisher.publishEvent(DealSealedEvent(deal.id))
-        }
+        val sealedDealEvents = deals.map { deal ->
+            DealSealedEvent(
+                deal.id,
+                deal.sellOrderId, deal.buyOrderId, deal.buyerId, deal.sellerId,
+                deal.assetId, deal.quantity, deal.unitPrice, deal.matchedBy
+            )
+        }.toSet()
 
-        return OrderMatched(deals.map { it.id })
+        val orderMatchedEvent = OrderMatchedEvent(
+            order.id,
+            sealedDealEvents
+        )
+
+        applicationEventPublisher.publishEvent(orderMatchedEvent)
+
+        return OrderMatched(order.id, deals.map { it.id })
     }
 }

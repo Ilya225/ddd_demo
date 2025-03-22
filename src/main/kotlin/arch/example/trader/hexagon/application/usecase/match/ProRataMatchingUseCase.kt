@@ -7,8 +7,9 @@ import arch.example.trader.hexagon.domain.entity.Order
 import arch.example.trader.hexagon.domain.entity.OrderType
 import arch.example.trader.hexagon.domain.port.outgoing.DealRepository
 import arch.example.trader.hexagon.domain.port.outgoing.OrderBook
+import java.math.BigDecimal
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 class ProRataMatchingUseCase(
     private val orderBook: OrderBook,
@@ -21,8 +22,10 @@ class ProRataMatchingUseCase(
 
         val totalQuantity = matchingOrders.sumOf { it.quantity }
         val allocatedOrders = matchingOrders.map { order ->
-            val allocation = (order.quantity.toDouble() / totalQuantity) * newOrder.quantity
-            order.copy(quantity = allocation.toLong())
+            val ratio = BigDecimal(totalQuantity) / BigDecimal(newOrder.quantity)
+
+            val allocatedOrder = order.allocate(ratio = ratio)
+            allocatedOrder
         }
 
         val deals = executeTrades(newOrder, allocatedOrders)
@@ -36,8 +39,16 @@ class ProRataMatchingUseCase(
         val sealedDeals = orders.map {
             val (buyOrder, sellOrder) = prepareOrdersForDeal(order, it)
             val sealedDeal = Deal(
-                DealId(UUID.randomUUID()), sellOrder.id, buyOrder.id, buyOrder.assetId,
-                it.quantity, sellOrder.price, Instant.now()
+                DealId(UUID.randomUUID()),
+                sellOrder.id,
+                sellOrder.traderId,
+                buyOrder.id,
+                buyOrder.traderId,
+                buyOrder.assetId,
+                it.quantity,
+                sellOrder.price,
+                sellOrder.unitPrice,
+                Instant.now()
             )
             sealedDeal
         }

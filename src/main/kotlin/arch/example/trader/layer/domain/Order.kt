@@ -8,7 +8,7 @@ data class Order(
     val id: UUID,
     val traderId: UUID,
     val assetId: UUID,
-    val price: BigDecimal,
+    val unitPrice: BigDecimal,
     val type: OrderType,
     val quantity: Long,
     val placedAt: Instant

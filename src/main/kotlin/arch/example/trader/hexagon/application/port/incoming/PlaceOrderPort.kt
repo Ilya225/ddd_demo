@@ -1,7 +1,8 @@
 package arch.example.trader.hexagon.application.port.incoming
 
-import arch.example.trader.hexagon.application.port.incoming.dto.PlaceOrderRequest
+import arch.example.trader.hexagon.application.port.incoming.dto.NewOrderRequest
+import arch.example.trader.hexagon.domain.entity.Order
 
 interface PlaceOrderPort {
-    fun placeOrder(request: PlaceOrderRequest)
+    fun placeOrder(request: NewOrderRequest): Order
 }

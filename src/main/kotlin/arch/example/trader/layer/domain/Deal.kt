@@ -10,6 +10,6 @@ data class Deal(
     val buyOrderId: UUID,
     val assetId: UUID,
     val quantity: Long,
-    val price: BigDecimal,
+    val unitPrice: BigDecimal,
     val createdAt: Instant,
 )

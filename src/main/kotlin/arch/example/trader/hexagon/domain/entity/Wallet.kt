@@ -29,4 +29,5 @@ data class Wallet(
     fun enoughFunds(amount: Money, quantity: Long) =
         this.balance >= (amount * quantity)
 
+
 }

@@ -33,7 +33,7 @@ class OrderPriceIsCompliantPolicy(
 
 
     private fun getMarketPrice(assetId: AssetId): Money {
-        return dealRepository.findByAssetIdOrderByCreatedAtDesc(assetId)?.price
+        return dealRepository.findByAssetIdOrderByCreatedAtDesc(assetId)?.unitPrice
             ?: ipoRepository.findOneByTradableId(assetId)?.price
             ?: throw IllegalStateException("No price for the asset: $assetId")
     }

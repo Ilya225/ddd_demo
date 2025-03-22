@@ -1,10 +1,10 @@
 package arch.example.trader.cqrs.config
 
 import arch.example.trader.cqrs.command.domain.entity.AssetType
-import arch.example.trader.cqrs.command.strategy.MarketMakerMatchingStrategy
-import arch.example.trader.cqrs.command.strategy.OrderMatchingStrategy
-import arch.example.trader.cqrs.command.strategy.PriceTimeMatchingStrategy
-import arch.example.trader.cqrs.command.strategy.ProRataMatchingStrategy
+import arch.example.trader.cqrs.command.domain.policy.matching.MarketMakerMatchingStrategy
+import arch.example.trader.cqrs.command.domain.policy.matching.OrderMatchingStrategy
+import arch.example.trader.cqrs.command.domain.policy.matching.PriceTimeMatchingStrategy
+import arch.example.trader.cqrs.command.domain.policy.matching.ProRataMatchingStrategy
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

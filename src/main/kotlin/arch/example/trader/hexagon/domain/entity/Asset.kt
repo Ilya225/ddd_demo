@@ -1,11 +1,17 @@
 package arch.example.trader.hexagon.domain.entity
 
-import java.util.UUID
+import java.util.*
 
 @JvmInline
 value class AssetId(val id: UUID)
 
-interface Asset {
-    val id: AssetId
+data class Asset(
+    val id: AssetId,
+    val type: AssetType,
+    val symbol: String
+)
+
+enum class AssetType {
+    STOCK, OPTION, FUTURE, COMMODITY, FOREX, CRYPTO
 }
 

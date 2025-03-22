@@ -11,14 +11,14 @@ class InMemoryOrderBook : OrderBook {
     private val buyOrders: ConcurrentHashMap<AssetId, PriorityQueue<Order>> = ConcurrentHashMap()
     private val sellOrders: ConcurrentHashMap<AssetId, PriorityQueue<Order>> = ConcurrentHashMap()
 
-    override fun placeOrder(order: Order) {
-        when (order.type) {
+    override fun placeOrder(order: Order): Order {
+        return when (order.type) {
             OrderType.SELL -> placeSellOrder(order)
             OrderType.BUY -> placeBuyOrder(order)
         }
     }
 
-    private fun placeSellOrder(order: Order) {
+    private fun placeSellOrder(order: Order): Order {
         if (sellOrders.containsKey(order.assetId)) {
             sellOrders[order.assetId]!!.add(order)
         } else {
@@ -27,9 +27,10 @@ class InMemoryOrderBook : OrderBook {
                 PriorityQueue<Order>(compareBy { it: Order -> it.unitPrice.amount }.thenBy { it.placedAt })
             )
         }
+        return order
     }
 
-    private fun placeBuyOrder(order: Order) {
+    private fun placeBuyOrder(order: Order): Order {
         if (buyOrders.contains(order.assetId)) {
             buyOrders[order.assetId]!!.add(order)
         } else {
@@ -38,6 +39,7 @@ class InMemoryOrderBook : OrderBook {
                 PriorityQueue<Order>((compareByDescending { it: Order -> it.unitPrice.amount }).thenBy { it.placedAt })
             )
         }
+        return order
     }
 
     override fun getMatchingOrders(order: Order): List<Order> =
@@ -47,7 +49,7 @@ class InMemoryOrderBook : OrderBook {
         }
 
 
-    override fun getBestOrder(order: Order): Order? =
+    override fun getOrdersByPlacedAtDesc(order: Order): Order? =
         when (order.type) {
             OrderType.SELL -> getBestSellOrder(order.assetId)
             OrderType.BUY -> getBestBuyOrder(order.assetId)

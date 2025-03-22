@@ -16,22 +16,48 @@ class PriceTimeMatchingUseCase(
 ) : MatchOrderPort {
 
     override fun matchOrder(newOrder: Order): List<Deal> {
-        val bestMatch = orderBook.getBestOrder(newOrder)
+        val orders = orderBook.getOrdersByPlacedAtDesc(newOrder)
 
-        if (bestMatch != null && newOrder.isMatch(bestMatch)) {
-            val (buyOrder, sellOrder) = prepareOrdersForDeal(newOrder, bestMatch)
-            val deal = executeTrade(buyOrder, sellOrder)
-            return listOf(deal)
+        val deals = mutableListOf<Deal>()
+        var remainingQuantity = newOrder.quantity
+
+        for (matchOrder in orders) {
+
+            if (remainingQuantity > 0 && newOrder.isMatch(matchOrder)) {
+
+                val tradeQuantity = minOf(remainingQuantity, matchOrder.quantity)
+                val (buyOrder, sellOrder) = prepareOrdersForDeal(newOrder, matchOrder)
+
+                val allocatedOrder = matchOrder.allocate(tradeQuantity)
+                orderBook.updateOrder(allocatedOrder)
+
+                val deal = executeTrade(buyOrder.copy(quantity = tradeQuantity), sellOrder)
+
+                deals.add(deal)
+                remainingQuantity -= tradeQuantity
+            }
         }
-        orderBook.placeOrder(newOrder)
-        return emptyList()
+
+        if (remainingQuantity > 0) {
+            orderBook.placeOrder(newOrder.allocate(newOrder.quantity - remainingQuantity))
+        }
+
+        return deals
     }
 
     private fun executeTrade(buyOrder: Order, sellOrder: Order): Deal {
         val matchedQuantity = minOf(buyOrder.quantity, sellOrder.quantity)
         val sealedDeal = Deal(
-            DealId(UUID.randomUUID()), sellOrder.id, buyOrder.id, buyOrder.assetId,
-            matchedQuantity, sellOrder.price, Instant.now()
+            DealId(UUID.randomUUID()),
+            sellOrder.id,
+            sellOrder.traderId,
+            buyOrder.id,
+            buyOrder.traderId,
+            buyOrder.assetId,
+            matchedQuantity,
+            sellOrder.price,
+            sellOrder.unitPrice,
+            Instant.now()
         )
 
         orderBook.cancelOrder(buyOrder)

@@ -5,4 +5,6 @@ import arch.example.trader.hexagon.domain.entity.Wallet
 
 interface WalletRepository {
     fun findByUserId(userId: UserId): Wallet?
+
+    fun save(wallet: Wallet): Wallet
 }
