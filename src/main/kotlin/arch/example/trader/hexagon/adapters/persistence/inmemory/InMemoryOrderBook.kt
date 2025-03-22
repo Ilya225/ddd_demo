@@ -49,24 +49,32 @@ class InMemoryOrderBook : OrderBook {
         }
 
 
-    override fun getOrdersByPlacedAtDesc(order: Order): Order? =
+    override fun getOrdersByPlacedAtDesc(order: Order): List<Order> =
         when (order.type) {
             OrderType.SELL -> getBestSellOrder(order.assetId)
             OrderType.BUY -> getBestBuyOrder(order.assetId)
         }
 
-    private fun getBestBuyOrder(assetId: AssetId): Order? =
-        buyOrders[assetId]?.peek()
+    private fun getBestBuyOrder(assetId: AssetId): List<Order> =
+        buyOrders[assetId]?.toList() ?: listOf()
 
 
-    private fun getBestSellOrder(assetId: AssetId): Order? =
-        sellOrders[assetId]?.peek()
+    private fun getBestSellOrder(assetId: AssetId): List<Order> =
+        sellOrders[assetId]?.toList() ?: listOf()
 
 
     override fun cancelOrder(order: Order) {
         when (order.type) {
-            OrderType.SELL -> sellOrders[order.assetId]?.removeAll { it: Order -> order.id == it.id  }
-            OrderType.BUY -> buyOrders[order.assetId]?.removeAll { it: Order -> order.id == it.id  }
+            OrderType.SELL -> sellOrders[order.assetId]?.removeAll { it: Order -> order.id == it.id }
+            OrderType.BUY -> buyOrders[order.assetId]?.removeAll { it: Order -> order.id == it.id }
         }
+    }
+
+    override fun getMarketMakersOrdersBy(order: Order): List<Order> {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateOrder(order: Order): Order {
+        TODO("Not yet implemented")
     }
 }
